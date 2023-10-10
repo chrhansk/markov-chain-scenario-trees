@@ -3,7 +3,7 @@ Plot optimally pruned Markov chain trees for spring packets example.
 """
 
 import numpy as np
-import spring_packets
+from mcst import spring_packets
 from mcst import scenario_tree_from_markov_chain, plot_scenario_tree
 import matplotlib.pyplot as plt
 
