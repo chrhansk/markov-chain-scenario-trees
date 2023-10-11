@@ -12,22 +12,19 @@ References
    pruning for Markov chain scenario tree NMPC", 2019.
 """
 
-from itertools import product
-from warnings import warn
 import numpy as np
-from scipy import sparse, linalg
 import scipy.sparse as sps
 import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
-import os
 import numpy.matlib
 from time import perf_counter
 
 
 def branchwise(tree):
-    """Return sets of nodes and edges from a dict-based tree.
-    
+    """
+    Return sets of nodes and edges from a dict-based tree.
+
     Parameters
     ----------
     tree: dict
@@ -126,9 +123,15 @@ def plot_scenario_tree(tree):
     plt.axis("off")
 
 
-def scenario_tree_from_markov_chain(A, depth, start_state=0,
-        max_scenarios=1000, prob_coverage=0.99, min_scenario_prob=1e-8,
-        interactive_visualization=False, verbose=False, timing=False):
+def scenario_tree_from_markov_chain(A,
+                                    depth,
+                                    start_state=0,
+                                    max_scenarios=1000,
+                                    prob_coverage=0.99,
+                                    min_scenario_prob=1e-8,
+                                    interactive_visualization=False,
+                                    verbose=False,
+                                    timing=False):
     """Generate scenario tree from a Markov chain.
 
     A polynomial-time algorithm that enumerates the scenarios of a Markov
@@ -217,8 +220,9 @@ def scenario_tree_from_markov_chain(A, depth, start_state=0,
     #  1: negative length of scenario
     #  2: scenario encoded as tuple
     R = [(-1., 0, (start_state,))]
-    #for i in range(T.shape[0]):
-    #    heapq.heappush(R, (-invariant_distribution[i], (-1,i)))
+
+    # for i in range(T.shape[0]):
+    #     heapq.heappush(R, (-invariant_distribution[i], (-1,i)))
 
     # extend by one vertex at a time
     n_scenarios = 0
@@ -227,7 +231,7 @@ def scenario_tree_from_markov_chain(A, depth, start_state=0,
         # get vertex from R with maximum probability
         neg_prob, neg_len, v = heapq.heappop(R)
         prob = -neg_prob
-        if len(v) < depth + 1: # check if maximal depth is reached
+        if len(v) < depth + 1:  # check if maximal depth is reached
             # extend set of reachable vertices
             irn = v[-1]
             begin, end = T.indptr[irn], T.indptr[irn+1]
@@ -238,7 +242,7 @@ def scenario_tree_from_markov_chain(A, depth, start_state=0,
                 else:
                     max_cut_scenario_prob = max(p, max_cut_scenario_prob)
         else:
-            tree[v] = prob # add to set of vertices
+            tree[v] = prob  # add to set of vertices
             if interactive_visualization:
                 plot_scenario_tree(tree)
                 plt.show()
@@ -259,4 +263,3 @@ def scenario_tree_from_markov_chain(A, depth, start_state=0,
                 cum_timings[:len(tree)])
     else:
         return tree, cum_probs[:len(tree)], max_cut_scenario_prob
-

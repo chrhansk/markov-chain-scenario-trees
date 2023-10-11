@@ -28,24 +28,23 @@ def transition_matrix(N, m, p):
     T = np.eye(m+1)
     for i in range(m+1):
         for j in range(i):
-            T[i,j] = comb(i, i-j) * p**(i-j)
-            T[i,i] -= T[i,j]
+            T[i, j] = comb(i, i-j) * p**(i-j)
+            T[i, i] -= T[i, j]
     T = csr_matrix(T)
 
     # assemble scenario matrix:
     # entry [i,j]: number of springs in packet j of parameter realization i
-    n_realizations = (m+1)**N
+    # n_realizations = (m+1)**N
     o_to_m = np.arange(m+1)
     e = np.ones((1, m+1), dtype=int)
     n_springs = np.array([o_to_m])
     for i in range(N-1):
         n_springs = np.vstack((np.kron(n_springs, e),
-            np.kron(np.repeat(e, (m+1)**i), o_to_m)))
+                               np.kron(np.repeat(e, (m+1)**i), o_to_m)))
 
     # assemble global transition matrix
     A = T
     for _ in range(N-1):
         A = skron(T, A)
-    A = csr_matrix(A) # BSR (kron) -> CSR
+    A = csr_matrix(A)  # BSR (kron) -> CSR
     return A, n_springs
-
