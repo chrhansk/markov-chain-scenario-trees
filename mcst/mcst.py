@@ -17,7 +17,6 @@ import scipy.sparse as sps
 import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
-import numpy.matlib
 from time import perf_counter
 
 
