@@ -12,12 +12,13 @@ References
    pruning for Markov chain scenario tree NMPC", 2019.
 """
 
+import heapq
+from time import perf_counter
+
+import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 import scipy.sparse as sps
-import heapq
-import networkx as nx
-import matplotlib.pyplot as plt
-from time import perf_counter
 
 
 def branchwise(tree):
